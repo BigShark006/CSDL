@@ -79,6 +79,25 @@ void sapXep(Node** head) {
     }
 }
 
+void themSauMa(Node** head, const char* maX, SinhVien sv) {
+    if (*head == NULL) {
+        printf("Danh sach rong. Khong tim thay ma %s.\n", maX);
+        return;
+    }
+    Node* p = *head;
+    while (p != NULL && strcmp(p->data.maSV, maX) != 0) {
+        p = p->next;
+    }
+    if (p == NULL) {
+        printf("Khong tim thay sinh vien co ma %s. Khong the them.\n", maX);
+        return;
+    }
+    Node* q = createNode(sv);
+    q->next = p->next;
+    p->next = q;
+    printf("Da them SV %s sau ma %s.\n", sv.maSV, maX);
+}
+
 void xoaDau(Node** head) {
     if (*head == NULL) return;
     Node* p = *head;
@@ -136,10 +155,11 @@ int main() {
         printf("3. Xuat SV co DTB > 5\n");
         printf("4. Tim SV theo ma\n");
         printf("5. Sap xep tang theo DTB\n");
-        printf("6. Xoa dau\n");
-        printf("7. Xoa cuoi\n");
-        printf("8. Xoa tat ca\n");
-        printf("9. Xoa SV theo ma\n");
+        printf("6. Them SV vao sau SV\n");
+        printf("7. Xoa dau\n");
+        printf("8. Xoa cuoi\n");
+        printf("9. Xoa tat ca\n");
+        printf("10. Xoa SV theo ma\n");
         printf("0. Thoat\n");
         printf("Chon: ");
         scanf("%d", &chon);
@@ -165,10 +185,16 @@ int main() {
             else printf("Khong thay!\n");
             break;
         case 5: sapXep(&head); break;
-        case 6: xoaDau(&head); break;
-        case 7: xoaCuoi(&head); break;
-        case 8: xoaAll(&head); break;
-        case 9:
+        case 6:
+            printf("Nhap ma SV X: "); scanf("%s", ma);
+            getchar();              
+            printf("Nhap thong tin SV can them:\n"); nhapSV(&sv);           
+            themSauMa(&head, ma, sv);
+            break;
+        case 7: xoaDau(&head); break;
+        case 8: xoaCuoi(&head); break;
+        case 9: xoaAll(&head); break;
+        case 10:
             printf("Nhap ma SV: ");
             scanf("%s", ma);
             xoaTheoMa(&head, ma);
@@ -179,3 +205,4 @@ int main() {
     xoaAll(&head);
     return 0;
 }
+
