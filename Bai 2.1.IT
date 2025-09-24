@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MAX 100
+
+// Hàm sinh mảng ngẫu nhiên
+void sinhMang(int a[], int *n) {
+    printf("Nhap so phan tu n (0 < n <= %d): ", MAX);
+    scanf("%d", n);
+    srand(time(NULL));
+    for (int i = 0; i < *n; i++) {
+        a[i] = rand() % 101; // giá trị từ 0 đến 100
+    }
+    printf("Da sinh mang ngau nhien!\n");
+}
+
+// Hàm xuất mảng
+void xuatMang(int a[], int n) {
+    if (n <= 0) {
+        printf("Mang rong!\n");
+        return;
+    }
+    printf("Mang hien tai: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+}
+
+// Hàm sắp xếp Interchange Sort
+void interchangeSort(int a[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (a[i] > a[j]) {
+                int tmp = a[i];
+                a[i] = a[j];
+                a[j] = tmp;
+            }
+        }
+    }
+    printf("Da sap xep bang Interchange Sort!\n");
+}
+
+// Hàm sắp xếp Bubble Sort
+void bubbleSort(int a[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (a[j] > a[j + 1]) {
+                int tmp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = tmp;
+            }
+        }
+    }
+    printf("Da sap xep bang Bubble Sort!\n");
+}
+
+// Hàm xuất menu
+void xuatMenu() {
+    printf("\n===== MENU =====\n");
+    printf("1. Sinh mang\n");
+    printf("2. Xuat mang\n");
+    printf("3. Interchange Sort\n");
+    printf("4. Bubble Sort\n");
+    printf("0. Thoat\n");
+    printf("Moi chon cong viec: ");
+}
+
+int main() {
+    int a[MAX], n = 0, chon;
+    do {
+        xuatMenu();
+        scanf("%d", &chon);
+        switch (chon) {
+            case 1:
+                sinhMang(a, &n);
+                break;
+            case 2:
+                xuatMang(a, n);
+                break;
+            case 3:
+                interchangeSort(a, n);
+                break;
+            case 4:
+                bubbleSort(a, n);
+                break;
+            case 0:
+                printf("Tam biet!\n");
+                break;
+            default:
+                printf("Lua chon khong hop le!\n");
+        }
+    } while (chon != 0);
+    return 0;
+}
