@@ -1,0 +1,148 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Cấu trúc node DSLK vòng đơn
+typedef struct Node {
+    int data;
+    struct Node *next;
+} Node;
+
+// Con trỏ đến node cuối (tail) để quản lý danh sách
+typedef struct {
+    Node *tail;
+} CList;
+
+// Khởi tạo danh sách rỗng
+void initList(CList *l) {
+    l->tail = NULL;
+}
+
+// Tạo node mới
+Node* createNode(int x) {
+    Node *p = (Node*)malloc(sizeof(Node));
+    if (p == NULL) {
+        printf("Khong du bo nho\n");
+        exit(1);
+    }
+    p->data = x;
+    p->next = NULL;
+    return p;
+}
+
+// Thêm vào cuối danh sách
+void insertLast(CList *l, int x) {
+    Node *p = createNode(x);
+    if (l->tail == NULL) { // danh sách rỗng
+        l->tail = p;
+        p->next = p; // trỏ vòng
+    } else {
+        p->next = l->tail->next;
+        l->tail->next = p;
+        l->tail = p;
+    }
+}
+
+// Thêm vào đầu danh sách
+void insertFirst(CList *l, int x) {
+    Node *p = createNode(x);
+    if (l->tail == NULL) {
+        l->tail = p;
+        p->next = p;
+    } else {
+        p->next = l->tail->next;
+        l->tail->next = p;
+    }
+}
+
+// In danh sách
+void printList(CList l) {
+    if (l.tail == NULL) {
+        printf("Danh sach rong\n");
+        return;
+    }
+    Node *p = l.tail->next; // node đầu
+    do {
+        printf("%d ", p->data);
+        p = p->next;
+    } while (p != l.tail->next);
+    printf("\n");
+}
+
+// Xóa node đầu
+void deleteFirst(CList *l) {
+    if (l->tail == NULL) return;
+    Node *head = l->tail->next;
+    if (head == l->tail) { // chỉ có 1 node
+        free(head);
+        l->tail = NULL;
+    } else {
+        l->tail->next = head->next;
+        free(head);
+    }
+}
+
+// Xóa node cuối
+void deleteLast(CList *l) {
+    if (l->tail == NULL) return;
+    Node *p = l->tail->next; // bắt đầu từ head
+    if (p == l->tail) { // chỉ có 1 node
+        free(l->tail);
+        l->tail = NULL;
+    } else {
+        while (p->next != l->tail) {
+            p = p->next;
+        }
+        p->next = l->tail->next;
+        free(l->tail);
+        l->tail = p;
+    }
+}
+
+// Xóa node có giá trị x (node đầu tiên tìm thấy)
+void deleteX(CList *l, int x) {
+    if (l->tail == NULL) return;
+    Node *curr = l->tail->next;
+    Node *prev = l->tail;
+    do {
+        if (curr->data == x) {
+            if (curr == l->tail->next) { // node đầu
+                deleteFirst(l);
+            } else if (curr == l->tail) { // node cuối
+                deleteLast(l);
+            } else {
+                prev->next = curr->next;
+                free(curr);
+            }
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    } while (curr != l->tail->next);
+}
+
+int main() {
+    CList l;
+    initList(&l);
+
+    insertLast(&l, 10);
+    insertLast(&l, 20);
+    insertFirst(&l, 5);
+    insertLast(&l, 30);
+
+    printf("Danh sach: ");
+    printList(l);
+
+    deleteX(&l, 20);
+    printf("Sau khi xoa 20: ");
+    printList(l);
+
+    deleteFirst(&l);
+printf("Sau khi xoa dau: ");
+    printList(l);
+
+    deleteLast(&l);
+    printf("Sau khi xoa cuoi: ");
+    printList(l);
+
+    return 0;
+}
