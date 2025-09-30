@@ -1,0 +1,231 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// ===== CẤU TRÚC SINH VIÊN =====
+typedef struct {
+    char maSV[10];
+    char tenSV[40];
+    float diemTB;
+} SinhVien;
+
+typedef struct Node {
+    SinhVien data;
+    struct Node *next;
+} Node;
+
+Node *head = NULL;
+
+// ===== HÀM HỖ TRỢ =====
+Node* createNode(SinhVien sv) {
+    Node* p = (Node*)malloc(sizeof(Node));
+    p->data = sv;
+    p->next = NULL;
+    return p;
+}
+
+void nhap1SV(SinhVien *sv) {
+    printf("Nhap ma SV: ");
+    fflush(stdin); gets(sv->maSV);
+    printf("Nhap ten SV: ");
+    fflush(stdin); gets(sv->tenSV);
+    printf("Nhap diem TB: ");
+    scanf("%f", &sv->diemTB);
+}
+
+// ===== a. Nhập danh sách SV =====
+void nhapDS() {
+    int n;
+    printf("Nhap so luong SV: ");
+    scanf("%d", &n);
+    for(int i=0;i<n;i++) {
+        SinhVien sv;
+        printf("\n-- Nhap SV thu %d --\n", i+1);
+        nhap1SV(&sv);
+        Node* p = createNode(sv);
+        if(head == NULL) head = p;
+        else {
+            Node* q = head;
+            while(q->next != NULL) q = q->next;
+            q->next = p;
+        }
+    }
+}
+
+// ===== b. Xuất danh sách =====
+void xuatDS() {
+    Node* p = head;
+    if(p == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    printf("\n===== DANH SACH SINH VIEN =====\n");
+    while(p != NULL) {
+        printf("%-10s | %-30s | %5.2f\n",
+               p->data.maSV, p->data.tenSV, p->data.diemTB);
+        p = p->next;
+    }
+}
+
+// ===== c. Xuất SV có DTB > 5 =====
+void xuatDiemLonHon5() {
+    Node* p = head;
+    printf("\n===== SV co diem TB > 5 =====\n");
+    while(p != NULL) {
+        if(p->data.diemTB > 5)
+            printf("%-10s | %-30s | %5.2f\n",
+                   p->data.maSV, p->data.tenSV, p->data.diemTB);
+        p = p->next;
+    }
+}
+
+// ===== d. Tìm SV theo mã X =====
+Node* timSV(char ma[]) {
+    Node* p = head;
+    while(p != NULL) {
+        if(strcmp(p->data.maSV, ma)==0) return p;
+        p = p->next;
+    }
+    return NULL;
+}
+
+// ===== e. Sắp xếp tăng dần theo điểm TB =====
+void sapXepTang() {
+    for(Node* i=head;i!=NULL;i=i->next){
+        for(Node* j=i->next;j!=NULL;j=j->next){
+            if(i->data.diemTB > j->data.diemTB){
+                SinhVien tmp = i->data;
+                i->data = j->data;
+                j->data = tmp;
+            }
+        }
+    }
+    printf("Da sap xep xong!\n");
+}
+
+// ===== f. Thêm SV sau SV có mã X =====
+void themSauMaX(char ma[]) {
+    Node* q = timSV(ma);
+    if(q == NULL) {
+        printf("Khong tim thay SV co ma %s!\n", ma);
+        return;
+    }
+    SinhVien sv;
+    printf("Nhap thong tin SV muon them:\n");
+    nhap1SV(&sv);
+    Node* pnew = createNode(sv);
+    pnew->next = q->next;
+    q->next = pnew;
+}
+
+// ===== g. Xóa SV đầu =====
+void xoaDau() {
+    if(head == NULL) return;
+    Node* p = head;
+    head = head->next;
+    free(p);
+}
+
+// ===== h. Xóa SV cuối =====
+void xoaCuoi() {
+    if(head == NULL) return;
+    if(head->next == NULL) {
+free(head);
+        head = NULL;
+        return;
+    }
+    Node* p = head;
+    while(p->next->next != NULL) p = p->next;
+    free(p->next);
+    p->next = NULL;
+}
+
+// ===== i. Xóa toàn bộ danh sách =====
+void xoaToanBo() {
+    Node* p;
+    while(head != NULL) {
+        p = head;
+        head = head->next;
+        free(p);
+    }
+}
+
+// ===== j. Xóa SV có mã X =====
+void xoaTheoMa(char ma[]) {
+    if(head == NULL) return;
+    if(strcmp(head->data.maSV, ma)==0) {
+        Node* tmp = head;
+        head = head->next;
+        free(tmp);
+        return;
+    }
+    Node* p = head;
+    while(p->next != NULL && strcmp(p->next->data.maSV, ma)!=0)
+        p = p->next;
+    if(p->next != NULL) {
+        Node* tmp = p->next;
+        p->next = tmp->next;
+        free(tmp);
+    } else {
+        printf("Khong tim thay SV co ma %s\n", ma);
+    }
+}
+
+// ===== MENU =====
+int menu() {
+    int chon;
+    printf("\n========= MENU QUAN LY SINH VIEN =========\n");
+    printf("1. Nhap danh sach sinh vien\n");
+    printf("2. Xuat danh sach sinh vien\n");
+    printf("3. Xuat cac SV co DTB > 5\n");
+    printf("4. Tim sinh vien theo ma X\n");
+    printf("5. Sap xep danh sach tang dan theo diem TB\n");
+    printf("6. Them SV sau SV co ma X\n");
+    printf("7. Xoa SV dau danh sach\n");
+    printf("8. Xoa SV cuoi danh sach\n");
+    printf("9. Xoa toan bo danh sach\n");
+    printf("10. Xoa SV co ma la X\n");
+    printf("0. Thoat\n");
+    printf("Nhap lua chon: ");
+    scanf("%d", &chon);
+    return chon;
+}
+
+// ===== MAIN =====
+int main() {
+    int chon;
+    char ma[10];
+    do {
+        chon = menu();
+        switch(chon) {
+            case 1: nhapDS(); break;
+            case 2: xuatDS(); break;
+            case 3: xuatDiemLonHon5(); break;
+            case 4:
+                printf("Nhap ma SV can tim: ");
+                fflush(stdin); gets(ma);
+                Node* p = timSV(ma);
+                if(p!=NULL) printf("Tim thay: %s - %s - %.2f\n",
+                                   p->data.maSV,p->data.tenSV,p->data.diemTB);
+                else printf("Khong tim thay!\n");
+                break;
+            case 5: sapXepTang(); break;
+            case 6:
+                printf("Nhap ma SV X: ");
+                fflush(stdin); gets(ma);
+                themSauMaX(ma);
+                break;
+            case 7: xoaDau(); break;
+            case 8: xoaCuoi(); break;
+            case 9: xoaToanBo(); break;
+            case 10:
+                printf("Nhap ma SV can xoa: ");
+                fflush(stdin); gets(ma);
+                xoaTheoMa(ma);
+                break;
+            case 0: printf("Thoat chuong trinh.\n"); break;
+            default: printf("Lua chon khong hop le!\n");
+        }
+    } while(chon != 0);
+    return 0;
+}
