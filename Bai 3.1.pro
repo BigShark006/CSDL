@@ -177,24 +177,49 @@ int menu() {
 int main() {
     int chon;
     char ma[10];
+
     do {
         chon = menu();
         switch(chon) {
-            case 11:
-    printf("Nhap ma SV X: ");
-    fflush(stdin); gets(ma);
-    xoaSauMaX(ma);
-    break;
-case 12: {
-    char ten[40];
-    printf("Nhap ten SV X: ");
-    fflush(stdin); gets(ten);
-    xoaTatCaTheoTen(ten);
-    break;
-}
-case 13: sapXepTheoMaSV(); break;
-case 14: inSVKha(); break;
-case 15: svMaxMin(); break;
- } while(chon != 0);
+            case 11: {
+                printf("Nhap ma SV X: ");
+                clearBuffer();
+                fgets(ma, sizeof(ma), stdin);
+                removeNewline(ma);
+                xoaSauMaX(ma);
+                break;
+            }
+            case 12: {
+                char ten[40];
+                printf("Nhap ten SV X: ");
+                clearBuffer();
+                fgets(ten, sizeof(ten), stdin);
+                removeNewline(ten);
+                xoaTatCaTheoTen(ten);
+                break;
+            }
+            case 13: {
+                sapXepTheoMaSV();
+                break;
+            }
+            case 14: {
+                inSVKha();
+                break;
+            }
+            case 15: {
+                svMaxMin();
+                break;
+            }
+            case 0: {
+                printf("Thoat chuong trinh!\n");
+                break;
+            }
+            default: {
+                printf("Lua chon khong hop le!\n");
+            }
+        }
+    } while(chon != 0);
+
     return 0;
 }
+
