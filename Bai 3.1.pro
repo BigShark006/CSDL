@@ -186,3 +186,6 @@ case 12: {
 case 13: sapXepTheoMaSV(); break;
 case 14: inSVKha(); break;
 case 15: svMaxMin(); break;
+ } while(chon != 0);
+    return 0;
+}
