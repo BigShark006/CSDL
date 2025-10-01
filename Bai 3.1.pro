@@ -1,3 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// ===== CẤU TRÚC SINH VIÊN =====
+typedef struct {
+    char maSV[10];
+    char tenSV[40];
+    float diemTB;
+} SinhVien;
+
+typedef struct Node {
+    SinhVien data;
+    struct Node *next;
+} Node;
+
+Node *head = NULL;
+
+// ===== HÀM HỖ TRỢ =====
+void clearBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void removeNewline(char *s) {
+    size_t len = strlen(s);
+    if(len > 0 && s[len-1] == '\n') s[len-1] = '\0';
+}
+
+Node* createNode(SinhVien sv) {
+    Node* p = (Node*)malloc(sizeof(Node));
+    p->data = sv;
+    p->next = NULL;
+    return p;
+}
+
+void nhap1SV(SinhVien *sv) {
+    printf("Nhap ma SV: ");
+    clearBuffer();
+    fgets(sv->maSV, sizeof(sv->maSV), stdin);
+    removeNewline(sv->maSV);
+
+    printf("Nhap ten SV: ");
+    fgets(sv->tenSV, sizeof(sv->tenSV), stdin);
+    removeNewline(sv->tenSV);
+
+    printf("Nhap diem TB: ");
+    scanf("%f", &sv->diemTB);
+}
+
+// ===== a. Nhập danh sách SV =====
+void nhapDS() {
+    int n;
+    printf("Nhap so luong SV: ");
+    scanf("%d", &n);
+    for(int i=0;i<n;i++) {
+        SinhVien sv;
+        printf("\n-- Nhap SV thu %d --\n", i+1);
+        nhap1SV(&sv);
+        Node* p = createNode(sv);
+        if(head == NULL) head = p;
+        else {
+            Node* q = head;
+            while(q->next != NULL) q = q->next;
+            q->next = p;
+        }
+    }
+}
+
+// ===== b. Xuất danh sách =====
+void xuatDS() {
+    Node* p = head;
+    if(p == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    printf("\n===== DANH SACH SINH VIEN =====\n");
+    while(p != NULL) {
+        printf("%-10s | %-30s | %5.2f\n",
+               p->data.maSV, p->data.tenSV, p->data.diemTB);
+        p = p->next;
+    }
+}
 // a. Xóa 1 SV sau SV có mã X
 void xoaSauMaX(char ma[]) {
     Node* p = timSV(ma);
