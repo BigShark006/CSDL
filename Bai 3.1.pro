@@ -81,6 +81,15 @@ void xuatDS() {
         p = p->next;
     }
 }
+Node* timSV(char ma[]) {
+    Node* p = head;
+    while(p != NULL) {
+        if(strcmp(p->data.maSV, ma)==0) return p;
+        p = p->next;
+    }
+    return NULL;
+}
+
 // a. Xóa 1 SV sau SV có mã X
 void xoaSauMaX(char ma[]) {
     Node* p = timSV(ma);
