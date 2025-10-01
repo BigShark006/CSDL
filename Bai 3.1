@@ -17,6 +17,16 @@ typedef struct Node {
 Node *head = NULL;
 
 // ===== HÀM HỖ TRỢ =====
+void clearBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+void removeNewline(char *s) {
+    size_t len = strlen(s);
+    if(len > 0 && s[len-1] == '\n') s[len-1] = '\0';
+}
+
 Node* createNode(SinhVien sv) {
     Node* p = (Node*)malloc(sizeof(Node));
     p->data = sv;
@@ -26,9 +36,14 @@ Node* createNode(SinhVien sv) {
 
 void nhap1SV(SinhVien *sv) {
     printf("Nhap ma SV: ");
-    fflush(stdin); gets(sv->maSV);
+    clearBuffer();
+    fgets(sv->maSV, sizeof(sv->maSV), stdin);
+    removeNewline(sv->maSV);
+
     printf("Nhap ten SV: ");
-    fflush(stdin); gets(sv->tenSV);
+    fgets(sv->tenSV, sizeof(sv->tenSV), stdin);
+    removeNewline(sv->tenSV);
+
     printf("Nhap diem TB: ");
     scanf("%f", &sv->diemTB);
 }
@@ -130,7 +145,7 @@ void xoaDau() {
 void xoaCuoi() {
     if(head == NULL) return;
     if(head->next == NULL) {
-free(head);
+        free(head);
         head = NULL;
         return;
     }
@@ -203,16 +218,22 @@ int main() {
             case 3: xuatDiemLonHon5(); break;
             case 4:
                 printf("Nhap ma SV can tim: ");
-                fflush(stdin); gets(ma);
-                Node* p = timSV(ma);
-                if(p!=NULL) printf("Tim thay: %s - %s - %.2f\n",
-                                   p->data.maSV,p->data.tenSV,p->data.diemTB);
-                else printf("Khong tim thay!\n");
+                clearBuffer();
+                fgets(ma, sizeof(ma), stdin);
+                removeNewline(ma);
+                {
+                    Node* p = timSV(ma);
+                    if(p!=NULL) printf("Tim thay: %s - %s - %.2f\n",
+                                       p->data.maSV,p->data.tenSV,p->data.diemTB);
+                    else printf("Khong tim thay!\n");
+                }
                 break;
             case 5: sapXepTang(); break;
             case 6:
                 printf("Nhap ma SV X: ");
-                fflush(stdin); gets(ma);
+                clearBuffer();
+                fgets(ma, sizeof(ma), stdin);
+                removeNewline(ma);
                 themSauMaX(ma);
                 break;
             case 7: xoaDau(); break;
@@ -220,7 +241,9 @@ int main() {
             case 9: xoaToanBo(); break;
             case 10:
                 printf("Nhap ma SV can xoa: ");
-                fflush(stdin); gets(ma);
+                clearBuffer();
+                fgets(ma, sizeof(ma), stdin);
+                removeNewline(ma);
                 xoaTheoMa(ma);
                 break;
             case 0: printf("Thoat chuong trinh.\n"); break;
