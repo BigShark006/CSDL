@@ -155,20 +155,15 @@ void svMaxMin() {
     printf("SV diem thap nhat: %s - %s - %.2f\n",
            svMin->data.maSV, svMin->data.tenSV, svMin->data.diemTB);
 }
-
-
-\\\_________________________///
-
-
-printf("11. Xoa 1 SV sau SV co ma X\n");
-printf("12. Xoa tat ca SV co ten la X\n");
-printf("13. Sap xep DSSV tang dan theo ma SV\n");
-printf("14. In danh sach SV xep loai kha\n");
-printf("15. Tim SV co diem TB cao nhat, thap nhat\n");
-
-
-\\\__________________________///
-
+int menu() {
+    int chon;
+        printf("11. Xoa 1 SV sau SV co ma X\n");
+        printf("12. Xoa tat ca SV co ten la X\n");
+        printf("13. Sap xep DSSV tang dan theo ma SV\n");
+        printf("14. In danh sach SV xep loai kha\n");
+        printf("15. Tim SV co diem TB cao nhat, thap nhat\n");
+    return chon;
+}
 
 case 11:
     printf("Nhap ma SV X: ");
