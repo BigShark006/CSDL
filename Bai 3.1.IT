@@ -1,0 +1,79 @@
+//Cau A
+#include <stdio.h>
+#include <stdlib.h>
+
+// Định nghĩa node
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// Định nghĩa list
+typedef struct {
+    Node* pHead;
+    Node* pTail;
+} List;
+
+// Khởi tạo danh sách rỗng
+void init(List *l) {
+    l->pHead = NULL;
+    l->pTail = NULL;
+}
+
+// Tạo node mới
+Node* createNode(int x) {
+    Node* p = (Node*)malloc(sizeof(Node));
+    if (p == NULL) return NULL;
+    p->data = x;
+    p->next = NULL;
+    return p;
+}
+
+// Thêm node vào cuối danh sách
+void addTail(List *l, Node* p) {
+    if (l->pHead == NULL) {
+        l->pHead = p;
+        l->pTail = p;
+    } else {
+        l->pTail->next = p;
+        l->pTail = p;
+    }
+}
+
+// Nhập danh sách
+void inputList(List *l, int n) {
+    for (int i = 0; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+        Node* p = createNode(x);
+        addTail(l, p);
+    }
+}
+
+// Xuất danh sách
+void outputList(List l) {
+    Node* p = l.pHead;
+    while (p != NULL) {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+}
+
+int main() {
+    List l;
+    init(&l);
+    int n;
+    scanf("%d", &n);
+    inputList(&l, n);
+    outputList(l);
+    return 0;
+}
+
+
+\\\____________________________///
+
+
+//Cau B
+
+
+
