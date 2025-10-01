@@ -180,6 +180,7 @@ int main() {
 
     do {
         chon = menu();
+        scanf("%d", &chon);
         switch(chon) {
             case 11: {
                 printf("Nhap ma SV X: ");
