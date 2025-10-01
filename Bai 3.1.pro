@@ -165,7 +165,13 @@ int menu() {
     return chon;
 }
 
-case 11:
+int main() {
+    int chon;
+    char ma[10];
+    do {
+        chon = menu();
+        switch(chon) {
+            case 11:
     printf("Nhap ma SV X: ");
     fflush(stdin); gets(ma);
     xoaSauMaX(ma);
