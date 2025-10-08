@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    int soThuTu;
+    char ten[30];
+    int tuoi;
+} BenhNhan;
+
+typedef struct node {
+    BenhNhan data;
+    struct node *next;
+} Node;
+
+typedef struct {
+    Node *front; // đầu hàng
+    Node *rear;  // cuối hàng
+} QUEUE;
+
+void Init(QUEUE *queue) {
+    queue->front = queue->rear = NULL;
+}
+
+int IsEmpty(QUEUE *queue) {
+    return queue->front == NULL;
+}
+
+void Enqueue(QUEUE *queue, BenhNhan bn) {
+    Node *newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = bn;
+    newNode->next = NULL;
+    if (IsEmpty(queue)) {
+        queue->front = queue->rear = newNode;
+    } else {
+        queue->rear->next = newNode;
+        queue->rear = newNode;
+    }
+}
+
+BenhNhan Dequeue(QUEUE *queue) {
+    BenhNhan bn = {0, "", 0};
+    if (!IsEmpty(queue)) {
+        Node *p = queue->front;
+        bn = p->data;
+        queue->front = queue->front->next;
+        if (queue->front == NULL)
+            queue->rear = NULL;
+        free(p);
+    }
+    return bn;
+}
+
+int Count(QUEUE *queue) {
+    int count = 0;
+    Node *p = queue->front;
+    while (p != NULL) {
+        count++;
+        p = p->next;
+    }
+    return count;
+}
+
+void GetAllPatients(QUEUE *queue, BenhNhan arr[], int *n) {
+    *n = 0;
+    Node *p = queue->front;
+    while (p != NULL) {
+        arr[*n] = p->data;
+        (*n)++;
+        p = p->next;
+    }
+}
+
+// ===== MAIN =====
+int main() {
+    QUEUE q;
+    Init(&q);
+
+    BenhNhan a = {1, "Nguyen Van A", 25};
+    BenhNhan b = {2, "Tran Thi B", 32};
+    BenhNhan c = {3, "Le Van C", 40};
+
+    Enqueue(&q, a);
+    Enqueue(&q, b);
+    Enqueue(&q, c);
+    BenhNhan ra = Dequeue(&q);
+    int soLuong = Count(&q);
+    BenhNhan ds[100];
+    int n;
+    GetAllPatients(&q, ds, &n);
+    return 0;
+}
