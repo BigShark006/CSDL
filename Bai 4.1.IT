@@ -1,16 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Định nghĩa Node trong danh sách liên kết
 typedef struct node {
     int key;
     struct node *next;
 } Node;
 
-// Định nghĩa Stack (con trỏ trỏ đến Node đầu)
 typedef Node* STACK;
 
-// Khởi tạo Stack rỗng
 void init(STACK *s) {
     *s = NULL;
 }
@@ -20,7 +17,6 @@ int isEmpty(STACK s) {
     return s == NULL;
 }
 
-// Thêm phần tử vào Stack
 void push(STACK *s, int x) {
     Node *p = (Node*)malloc(sizeof(Node));
     p->key = x;
@@ -28,7 +24,6 @@ void push(STACK *s, int x) {
     *s = p;
 }
 
-// Lấy phần tử ra khỏi Stack
 int pop(STACK *s) {
     if (isEmpty(*s)) return -1; // Stack rỗng
     Node *p = *s;
@@ -38,7 +33,6 @@ int pop(STACK *s) {
     return x;
 }
 
-// Hàm chuyển đổi thập phân sang nhị phân (trả về Stack chứa các bit)
 void decimalToBinary(int n, STACK *s) {
     init(s);
     while (n > 0) {
@@ -46,6 +40,14 @@ void decimalToBinary(int n, STACK *s) {
         push(s, r);
         n /= 2;
     }
+}
+
+int main() {
+    int n = 10;    
+    STACK s;
+    decimalToBinary(n, &s);
+
+    return 0;
 }
 
 
@@ -56,7 +58,6 @@ void decimalToBinary(int n, STACK *s) {
 #include <string.h>
 #include <ctype.h>
 
-// ===== Định nghĩa Stack bằng danh sách liên kết =====
 typedef struct node {
     char key;
     struct node *next;
@@ -64,7 +65,6 @@ typedef struct node {
 
 typedef Node* STACK;
 
-// ===== Các thao tác với Stack =====
 void init(STACK *s) {
     *s = NULL;
 }
@@ -94,7 +94,6 @@ char peek(STACK s) {
     return s->key;
 }
 
-// ===== Xác định độ ưu tiên toán tử =====
 int precedence(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
@@ -102,8 +101,6 @@ int precedence(char op) {
     return 0;
 }
 
-// ===== Hàm chính: chuyển trung tố sang hậu tố =====
-// Lưu kết quả vào chuỗi output (không in ra)
 void infixToPostfix(char infix[], char postfix[]) {
     STACK s;
     init(&s);
@@ -112,7 +109,7 @@ void infixToPostfix(char infix[], char postfix[]) {
     for (int i = 0; i < strlen(infix); i++) {
         char c = infix[i];
 
-        if (isalnum(c)) {
+        if (isalnum(c)) { 
             postfix[k++] = c;
         }
         else if (c == '(') {
@@ -122,7 +119,7 @@ void infixToPostfix(char infix[], char postfix[]) {
             while (!isEmpty(s) && peek(s) != '(') {
                 postfix[k++] = pop(&s);
             }
-            pop(&s); // bỏ dấu '(' ra
+            pop(&s); 
         }
         else { // toán tử
             while (!isEmpty(s) && precedence(peek(s)) >= precedence(c)) {
@@ -135,9 +132,18 @@ void infixToPostfix(char infix[], char postfix[]) {
     while (!isEmpty(s)) {
         postfix[k++] = pop(&s);
     }
-    postfix[k] = '\0'; // kết thúc chuỗi
+
+    postfix[k] = '\0'; 
 }
 
+// ===== Hàm main =====
+int main() {
+    char infix[100], postfix[100];
+    printf("Nhap bieu thuc trung to: ");
+    fgets(infix, sizeof(infix), stdin);
+    infix[strcspn(infix, "\n")] = '\0'; 
 
-
-
+    infixToPostfix(infix, postfix);
+    printf("Bieu thuc hau to: %s\n", postfix);
+    return 0;
+}
