@@ -1,0 +1,143 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Định nghĩa Node trong danh sách liên kết
+typedef struct node {
+    int key;
+    struct node *next;
+} Node;
+
+// Định nghĩa Stack (con trỏ trỏ đến Node đầu)
+typedef Node* STACK;
+
+// Khởi tạo Stack rỗng
+void init(STACK *s) {
+    *s = NULL;
+}
+
+// Kiểm tra Stack có rỗng không
+int isEmpty(STACK s) {
+    return s == NULL;
+}
+
+// Thêm phần tử vào Stack
+void push(STACK *s, int x) {
+    Node *p = (Node*)malloc(sizeof(Node));
+    p->key = x;
+    p->next = *s;
+    *s = p;
+}
+
+// Lấy phần tử ra khỏi Stack
+int pop(STACK *s) {
+    if (isEmpty(*s)) return -1; // Stack rỗng
+    Node *p = *s;
+    int x = p->key;
+    *s = p->next;
+    free(p);
+    return x;
+}
+
+// Hàm chuyển đổi thập phân sang nhị phân (trả về Stack chứa các bit)
+void decimalToBinary(int n, STACK *s) {
+    init(s);
+    while (n > 0) {
+        int r = n % 2;
+        push(s, r);
+        n /= 2;
+    }
+}
+
+
+//////////
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+// ===== Định nghĩa Stack bằng danh sách liên kết =====
+typedef struct node {
+    char key;
+    struct node *next;
+} Node;
+
+typedef Node* STACK;
+
+// ===== Các thao tác với Stack =====
+void init(STACK *s) {
+    *s = NULL;
+}
+
+int isEmpty(STACK s) {
+    return s == NULL;
+}
+
+void push(STACK *s, char x) {
+    Node *p = (Node*)malloc(sizeof(Node));
+    p->key = x;
+    p->next = *s;
+    *s = p;
+}
+
+char pop(STACK *s) {
+    if (isEmpty(*s)) return '\0';
+    Node *p = *s;
+    char x = p->key;
+    *s = p->next;
+    free(p);
+    return x;
+}
+
+char peek(STACK s) {
+    if (isEmpty(s)) return '\0';
+    return s->key;
+}
+
+// ===== Xác định độ ưu tiên toán tử =====
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    if (op == '^') return 3;
+    return 0;
+}
+
+// ===== Hàm chính: chuyển trung tố sang hậu tố =====
+// Lưu kết quả vào chuỗi output (không in ra)
+void infixToPostfix(char infix[], char postfix[]) {
+    STACK s;
+    init(&s);
+    int k = 0;
+
+    for (int i = 0; i < strlen(infix); i++) {
+        char c = infix[i];
+
+        if (isalnum(c)) {
+            postfix[k++] = c;
+        }
+        else if (c == '(') {
+            push(&s, c);
+        }
+        else if (c == ')') {
+            while (!isEmpty(s) && peek(s) != '(') {
+                postfix[k++] = pop(&s);
+            }
+            pop(&s); // bỏ dấu '(' ra
+        }
+        else { // toán tử
+            while (!isEmpty(s) && precedence(peek(s)) >= precedence(c)) {
+                postfix[k++] = pop(&s);
+            }
+            push(&s, c);
+        }
+    }
+
+    while (!isEmpty(s)) {
+        postfix[k++] = pop(&s);
+    }
+    postfix[k] = '\0'; // kết thúc chuỗi
+}
+
+
+
+
